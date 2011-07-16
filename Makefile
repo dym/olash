@@ -33,6 +33,14 @@ get_restas_odesk:
 	    cd ${BUILD_DIR} && git clone https://github.com/dym/restas-odesk.git; \
 	fi
 
+get_restas_dirpub:
+	@echo "Downloading RESTAS-Directory-publisher"
+	if [ -d "${BUILD_DIR}/restas-directory-publisher" ] ; then \
+	    cd ${BUILD_DIR}/restas-directory-publisher && git pull; \
+	else \
+	    cd ${BUILD_DIR} && git clone https://github.com/archimag/restas-directory-publisher.git; \
+	fi
+
 bootstrap:
 	mkdir -p ${BUILD_DIR}
 	mkdir -p ${REGISTRY_DIR}
@@ -40,7 +48,12 @@ bootstrap:
 	$(MAKE) get_restas
 	$(MAKE) get_cl_odesk
 	$(MAKE) get_restas_odesk
+	$(MAKE) get_restas_dirpub
 	echo "(:directory \"${BUILD_DIR}/hunchentoot/\")" > ${REGISTRY_DIR}/hunchentoot.conf
 	echo "(:directory \"${BUILD_DIR}/restas/\")" > ${REGISTRY_DIR}/restas.conf
-	#echo "(:directory \"${BUILD_DIR}/cl-odesk/\")" > ${REGISTRY_DIR}/cl-odesk.conf
-	#echo "(:directory \"${BUILD_DIR}/restas-odesk/\")" > ${REGISTRY_DIR}/restas-odesk.conf
+	echo "(:directory \"${BUILD_DIR}/cl-odesk/\")" > ${REGISTRY_DIR}/cl-odesk.conf
+	echo "(:directory \"${BUILD_DIR}/restas-odesk/\")" > ${REGISTRY_DIR}/restas-odesk.conf
+	echo "(:directory \"${BUILD_DIR}/restas-directory-publisher/\")" > ${REGISTRY_DIR}/restas-dirpub.conf
+
+quickload:
+	sbcl --noinform --script requirements.lisp

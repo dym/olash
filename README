@@ -1,0 +1,12 @@
+
+# apt-get install sbcl make curl
+
+$ curl -O http://beta.quicklisp.org/quicklisp.lisp
+$ sbcl --load quicklisp.lisp
+
+In SBCL:
+(quicklisp-quickstart:install)
+(ql:add-to-init-file)
+
+$ make quickload
+$ make bootstrap
