@@ -1,5 +1,5 @@
 
-# apt-get install sbcl make curl
+# apt-get install sbcl make curl redis-server
 
 $ curl -O http://beta.quicklisp.org/quicklisp.lisp
 $ sbcl --load quicklisp.lisp

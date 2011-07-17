@@ -14,7 +14,11 @@
   :components
   ((:module "src"
             :components
-            ((:file "defmodule")
+            ((:file "packages")
+             (:file "parameters" :depends-on ("packages"))
+             (:file "utils" :depends-on ("parameters"))
+             (:file "defmodule" :depends-on ("parameters"))
              (:file "routes" :depends-on ("defmodule")))))
   :depends-on (#:restas #:restas-directory-publisher
-                        #:restas-odesk #:closure-template))
+               #:restas-odesk #:closure-template
+               #:rbauth #:hunchentoot #:odesk #:yason))

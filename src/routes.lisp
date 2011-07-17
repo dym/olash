@@ -3,5 +3,5 @@
 (in-package :olash)
 
 (restas:define-route main ("")
-  (tpl:main (list :title "oLash | We will motivate you to work"
+  (tpl:main (list :title "oLash | We motivate"
                   :content "Here will be some content")))
