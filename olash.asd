@@ -21,4 +21,5 @@
              (:file "routes" :depends-on ("defmodule")))))
   :depends-on (#:restas #:restas-directory-publisher
                #:restas-odesk #:closure-template
-               #:rbauth #:hunchentoot #:odesk #:yason))
+               #:rbauth #:hunchentoot #:odesk #:yason
+               #:local-time #:alexandria #:iterate))

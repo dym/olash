@@ -2,6 +2,13 @@
 
 (in-package :olash)
 
+(defun get-week-points (current-time)
+  (let* ((weekday (timestamp-day-of-week current-time))
+         (start-time (adjust-timestamp current-time (offset :day-of-week :monday)))
+         (end-time (adjust-timestamp start-time (offset :day 7))))
+    (list (format-rfc3339-timestring nil start-time :omit-time-part t)
+          (format-rfc3339-timestring nil end-time :omit-time-part t))))
+
 (defun test-token-callback (token)
   (format t "TOKEN: ~a~%" token))
 
@@ -21,4 +28,5 @@
                     :first-name first-name
                     :last-name last-name)
       (hunchentoot:set-cookie *olash-web-session-key*
+                              :path "/"
                               :value session))))
