@@ -9,30 +9,72 @@
 {template main}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-  <head>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
     <title>{$title}</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  </head>
-  <body id="top">
-    {$content | noAutoescape}
-    <br />
-    <a href="/auth/authenticate/">Login with oDesk</a>
-  </body>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='http://fonts.googleapis.com/css?family=Expletus+Sans:400,700&v2' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="/css/main.css" type="text/css" />
+</head>
+<body>
+    <div class="top_bar">
+        <div class="left">
+            <span class="olash_o">o</span><span class="olash">Lash</span>
+        </div>
+        <div class="right">
+            Logged out
+        </div>
+        <div style="clear: both"></div>
+    </div>
+    <div class="main">
+        <!-- button class='button' onclick="window.location = '/auth/authenticate/';">Login with oDesk</button -->
+        <a class='login button' href='/auth/authenticate/'>Login with oDesk</a>
+    </div>
+</body>
 </html>
 {/template}
 
 {template main-logged}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-  <head>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
     <title>{$title}</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  </head>
-  <body id="top">
-    {$content | noAutoescape}
-    <br />
-    <a href="/logout/">Logout</a>
-  </body>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='http://fonts.googleapis.com/css?family=Expletus+Sans:400,700&v2' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="/css/main-logged.css" type="text/css" />
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script src="/js/hours.js"></script>
+</head>
+<body>
+    <div class="top_bar">
+        <div class="left">
+            <span class="olash_o">o</span><span class="olash">Lash</span>
+        </div>
+        <div class="right">
+            Logged in as <span class="name">{$firstname | noAutoescape} {$lastname | noAutoescape}</span> | <a href="/logout" class="logout">Logout</a>
+        </div>
+        <div style="clear: both"></div>
+    </div>
+    <div class="main">
+        <div id='gauge'></div>
+    </div>
+    <div class="advice">
+        <div class="advice_text">Always work hard (or till I put smth usefull here) </div>
+        <button class='button' disabled='disabled' onclick="show_message();">Get another opinion</button>
+    </div>
+</body>
 </html>
 {/template}
-

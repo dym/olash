@@ -5,10 +5,12 @@
 (restas:define-route main ("")
   (let ((session (hunchentoot:cookie-in *olash-web-session-key*)))
     (if (rbauth:authenticated-p session)
-        (tpl:main-logged (list :title "oLash | We motivate"
-                               :content "Welcome in"))
-        (tpl:main (list :title "oLash | We motivate"
-                        :content "Please log in")))))
+        (let ((first-name (rbauth:get-first-name session))
+              (last-name (rbauth:get-last-name session)))
+          (tpl:main-logged (list :title "oLash | We motivate"
+                                 :firstname first-name
+                                 :lastname last-name)))
+        (tpl:main (list :title "oLash | We motivate")))))
 
 
 (restas:define-route util-get-hours ("/util/hours/"
@@ -31,5 +33,5 @@
                  (rows (gethash "rows" table))
                  (hours (iter (for htable in rows)
                               (collect (read-from-string (gethash "v" (first (gethash "c" htable))))))))
-            (tpl:utils-hours (list :content (format nil "{\"result\": \"~a\"}" (apply '+ hours))))))
+            (tpl:utils-hours (list :content (format nil "{\"result\": \"~a\"}" (* (/ (apply '+ hours) 30) 100))))))
         (tpl:utils-hours (list :content "{\"result\": \"empty\"}")))))
