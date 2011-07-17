@@ -26,7 +26,5 @@
 (ql:quickload 'trivial-backtrace)
 (ql:quickload 'rfc2388)
 (ql:quickload 'cl-fad)
-(ql:quickload 'hunchentoot)
-(ql:quickload 'hunchentoot-cgi)
 (ql:quickload 'iolib.syscalls)
 (ql:quickload 'local-time)
