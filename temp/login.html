@@ -1,0 +1,105 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>oLash</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/agents.ico') }}">
+
+    <style type="text/css">
+        body { margin: 0; padding: 0; background: #fdf6e4; }
+        .top_bar {
+            padding: 0 10px;
+            background: #e6d1b4;
+            border-top: 2px solid #67452e;
+            border-bottom: 1px solid white;
+        }
+        .top_bar .left {
+            float: left;
+        }
+        .top_bar .right {
+            float: right;
+            margin-top: 10px;
+            color: #67452E;
+        }
+        .right a {
+            color: #67452E;
+        }
+        .name, .logout {
+            font-weight: bold;
+        }
+        .olash, .olash_o {
+            font-weight: bold;
+            font-size: 200%;
+            color: #67452e;
+            font-family: 'Expletus Sans', serif;
+            text-shadow: -1px -1px 3px #eeeeee,
+                          1px  1px 3px #000000;
+        }
+        .olash_o {
+            color: #2e4567;
+        }
+        .main {
+            margin: 100px auto;
+            text-align: center;
+        }
+        .login {
+            padding: 15px;
+            background: white;
+            border: 2px solid black;
+        }
+        .button {
+            border-top: 1px solid #f8d196;
+            background: #65a9d7;
+            background: -webkit-gradient(linear, left top, left bottom, from(#9d773e), to(#d7a965));
+            background: -moz-linear-gradient(top, #9d773e, #d7a965);
+            padding: 10px;
+            -webkit-border-radius: 7px;
+            -moz-border-radius: 7px;
+            border-radius: 7px;
+            -webkit-box-shadow: rgba(0,0,0,1) 0 1px 0;
+            -moz-box-shadow: rgba(0,0,0,1) 0 1px 0;
+            box-shadow: rgba(0,0,0,1) 0 1px 0;
+            text-shadow: rgba(0,0,0,.4) 0 1px 0;
+            color: white;
+            font-size: 24px;
+            font-family: Georgia, serif;
+            text-decoration: none;
+            vertical-align: middle;
+        }
+        .button:hover {
+            border-top-color: #7a5928;
+            background: #7a5928;
+            color: #ccc;
+        }
+        .button:active {
+            border-top-color: #5e431b;
+            background: #5e431b;
+        }
+    </style>
+
+    </script>
+    {% block extended_head %}{% endblock %}
+
+</head>
+<body>
+    <div class="top_bar">
+        <div class="left">
+            <span class="olash_o">o</span><span class="olash">Lash</span>
+        </div>
+        <div class="right">
+            Logged out
+        </div>
+        <div style="clear: both"></div>
+    </div>
+    <div class="main">
+        <!-- button class='button' onclick="window.location = '/login';">Login with oDesk</button -->
+        <a class='login button' href='/login'>Login with oDesk</a>
+    </div>
+</body>
+</html>
