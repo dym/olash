@@ -38,5 +38,5 @@
                  (rows (gethash "rows" table))
                  (hours (iter (for htable in rows)
                               (collect (read-from-string (gethash "v" (first (gethash "c" htable))))))))
-            (tpl:utils-hours (list :content (format nil "{\"result\": \"~a\"}" (* (/ (apply '+ hours) 30) 100))))))
+            (tpl:utils-hours (list :content (format nil "{\"result\": \"~a\"}" (* (/ (apply '+ hours) 40) 100))))))
         (tpl:utils-hours (list :content "{\"result\": \"empty\"}")))))
