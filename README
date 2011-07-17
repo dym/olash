@@ -1,5 +1,9 @@
 
-# apt-get install sbcl make curl redis-server
+# apt-get install sbcl make curl redis-server git
+
+Now we gonna do bad things. But there is no way :(
+# echo -n > /etc/sbcl.rc
+# rm -f /etc/common-lisp/source-registry.conf.d/02-common-lisp-controller-userdir.conf
 
 $ curl -O http://beta.quicklisp.org/quicklisp.lisp
 $ sbcl --load quicklisp.lisp
@@ -10,3 +14,10 @@ In SBCL:
 
 $ make quickload
 $ make bootstrap
+
+
+To run type in SBCL (i.e. in `sbcl`:
+
+(load "olash.asd")
+(require :olash)
+(restas:start '#:olash :port 8000)

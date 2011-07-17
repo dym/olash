@@ -28,3 +28,4 @@
 (ql:quickload 'cl-fad)
 (ql:quickload 'iolib.syscalls)
 (ql:quickload 'local-time)
+(ql:quickload 'cl-redis)
