@@ -12,6 +12,11 @@
                                  :lastname last-name)))
         (tpl:main (list :title "oLash | We motivate")))))
 
+(restas:define-route logout ("/logout/")
+  (let ((session (hunchentoot:cookie-in *olash-web-session-key*)))
+    (if (rbauth:authenticated-p session)
+        (rbauth:logout session)))
+  (restas:redirect "/"))
 
 (restas:define-route util-get-hours ("/util/hours/"
                                      :content-type "application/json")
