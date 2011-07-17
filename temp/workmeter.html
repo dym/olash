@@ -1,0 +1,109 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title></title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/agents.ico') }}">
+    <link href='http://fonts.googleapis.com/css?family=Expletus+Sans:400,700&v2' rel='stylesheet' type='text/css'>
+
+    <style type="text/css">
+        body { margin: 0; padding: 0; background: #fdf6e4; }
+        .top_bar {
+            padding: 0 10px;
+            background: #e6d1b4;
+            border-top: 2px solid #67452e;
+            border-bottom: 1px solid white;
+        }
+        .top_bar .left {
+            float: left;
+        }
+        .top_bar .right {
+            float: right;
+            margin-top: 10px;
+            color: white;
+            text-shadow: 0px 0px 3px #000;
+        }
+        .right a {
+            color: white;
+        }
+        .name, .logout {
+            font-weight: bold;
+        }
+        .olash {
+            font-weight: bold;
+            font-size: 200%;
+            color: #67452e;
+            font-family: 'Expletus Sans', serif;
+            text-shadow: -2px -2px 4px #eeeeee,
+                          2px  2px 4px #000000;
+        }
+        #gauge {
+            margin: 0 auto;
+            width: 300px;
+        }
+        .advice {
+            margin: auto;
+            width: 50%;
+            text-align: center;
+            background: #000;
+            color: white;
+            border: 2px solid gray;
+            border-radius: 5px;
+        }
+    </style>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-1.5.1.min.js') }}"></script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+    google.load('visualization', '1', {packages: ['gauge']});
+    google.setOnLoadCallback(drawChart);
+    function drawChart() {
+        $.ajax("{{ url_for('get_percent') }}", {
+            dataType: 'json',
+            success: function(data, textStatus, jqXhr) {
+                pct = data['percent'];
+                if (typeof(pct) != "undefined") {
+                    pct = eval(pct);
+                    var data = new google.visualization.DataTable();
+                    data.addColumn('string', 'Label');
+                    data.addColumn('number', 'Value');
+                    data.addRows(1);
+                    data.setValue(0, 0, '% Done');
+                    data.setValue(0, 1, pct);
+                    var chart = new google.visualization.Gauge(document.getElementById('gauge'));
+                    var options = {width: 300, height: 300, redFrom: 0, redTo: 70,
+                        yellowFrom:70, yellowTo: 80, greenFrom: 80, greenTo: 100,
+                        redColor: '#B03912', yellowColor: '#F08800', greenColor: '#209020', minorTicks: 1};
+                    chart.draw(data, options);
+                }
+            }
+        });
+    }
+    </script>
+    {% block extended_head %}{% endblock %}
+
+</head>
+<body>
+    <div class="top_bar">
+        <div class="left">
+            <span class="olash">oLash</span>
+        </div>
+        <div class="right">
+            Logged in as <span class="name">{{ first_name }} {{ last_name }}</span> | <a href="/logout" class="logout">Logout</a>
+        </div>
+        <div style="clear: both"></div>
+    </div>
+    <div class="main">
+        <div id='gauge'></div>
+    </div>
+    <div class="advice">
+        Always work hard (or till I put smth usefull here)
+    </div>
+</body>
+</html>
