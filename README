@@ -17,8 +17,9 @@ $ make quickload
 $ make bootstrap
 
 
-To run type in SBCL (i.e. in `sbcl`:
+To run type in SBCL (i.e. in `sbcl`):
 
-(load "olash.asd")
-(require :olash)
-(restas:start '#:olash :port 8000)
+(progn
+  (load "olash.asd")
+  (require :olash)
+  (restas:start '#:olash :port 8000))
