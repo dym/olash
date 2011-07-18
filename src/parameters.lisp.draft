@@ -1,0 +1,8 @@
+; -*- coding: utf-8; mode: common-lisp; -*-
+
+(in-package :olash)
+
+(defparameter *odesk-api-public-key* "PUT-THERE-SOMETHING-REAL")
+(defparameter *odesk-api-secret-key* "PUT-THERE-SOMETHING-REAL")
+
+(defparameter *olash-web-session-key* "_olash_session")
