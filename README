@@ -1,4 +1,4 @@
-First create copy file src/parameters.lisp.draft to src/parameters.lisp and add real oDesk API keys there.
+First copy file src/parameters.lisp.draft to src/parameters.lisp and add real oDesk API keys there.
 
 # apt-get install sbcl make curl redis-server git
 
@@ -16,10 +16,8 @@ In SBCL:
 $ make quickload
 $ make bootstrap
 
+Copy olash.daemon.draft to olash.daemon and change user in the olash.daemon file.
+$ sudo sbcl --load build/restas/contrib/restas-daemon.lisp olash.daemon start
 
-To run type in SBCL (i.e. in `sbcl`):
-
-(progn
-  (load "olash.asd")
-  (require :olash)
-  (restas:start '#:olash :port 8000))
+If you want to stop it, just do:
+$ sudo sbcl --load build/restas/contrib/restas-daemon.lisp olash.daemon stop

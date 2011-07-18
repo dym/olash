@@ -1,0 +1,15 @@
+; -*- coding: utf-8; mode: common-lisp; -*-
+
+(defparameter *name* "olash")
+
+(defparameter *user* "dym")
+
+(defparameter *group* "dym")
+
+(defparameter *swankport* 30010)
+
+(defparameter *default-host-redirect* nil)
+
+(defparameter *asdf-load-systems* '(#:olash))
+
+(defparameter *sites* '((#:olash nil 8000)))

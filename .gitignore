@@ -4,3 +4,4 @@
 build/
 PRIVATE
 src/parameters.lisp
+olash.daemon
