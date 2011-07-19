@@ -12,6 +12,10 @@
                                  :lastname last-name)))
         (tpl:main (list :title "oLash | We motivate")))))
 
+; Fix for some bugs
+(restas:define-route main-nil ("/NIL")
+  (restas:redirect "/"))
+
 (restas:define-route logout ("/logout/")
   (let ((session (hunchentoot:cookie-in *olash-web-session-key*)))
     (if (rbauth:authenticated-p session)
