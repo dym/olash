@@ -29,3 +29,4 @@
 (ql:quickload 'iolib.syscalls)
 (ql:quickload 'local-time)
 (ql:quickload 'cl-redis)
+(ql:quickload 'swank)
