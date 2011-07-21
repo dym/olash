@@ -30,3 +30,4 @@
 (ql:quickload 'local-time)
 (ql:quickload 'cl-redis)
 (ql:quickload 'swank)
+(ql:quickload 'cl-ppcre)

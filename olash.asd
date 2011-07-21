@@ -22,4 +22,4 @@
   :depends-on (#:restas #:restas-directory-publisher
                #:restas-odesk #:closure-template
                #:rbauth #:hunchentoot #:odesk #:yason
-               #:local-time #:alexandria #:iterate))
+               #:local-time #:alexandria #:iterate #:cl-ppcre))
