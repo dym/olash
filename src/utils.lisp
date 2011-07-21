@@ -9,18 +9,21 @@
 (defun test-token-callback (token)
   (format t "TOKEN: ~a~%" token))
 
-(defun get-teamrooms (token)
+(defun fetch-teamrooms (token)
   (odesk:with-odesk (:format :json
                      :public-key *odesk-api-public-key*
                      :secret-key *odesk-api-secret-key*
                      :api-token token)
     (let* ((json-text (first (odesk:team/get-teamrooms)))
            (parsed-json (json:parse json-text))
-           (rooms-list (gethash "teamroom" (gethash "teamrooms" parsed-json))))
-      (iter (for htable in rooms-list)
-            (collect (gethash "id" htable))))))
+           (rooms (gethash "teamroom" (gethash "teamrooms" parsed-json))))
+      (if (listp rooms)
+          (iter (for htable in rooms)
+                (collect (gethash "id" htable)))
+          (list (gethash "id" rooms))))))
 
 (defun fetch-hours-from-report (token &key username start-date end-date)
+  (format t "from report: ~a ~a~%" token username)
   (odesk:with-odesk (:format :json
                      :public-key *odesk-api-public-key*
                      :secret-key *odesk-api-secret-key*
@@ -39,7 +42,7 @@
       (apply '+ hours))))
 
 (defun fetch-hours-from-workdiary (token &key username date)
-  (let ((teamrooms (get-teamrooms token))
+  (let ((teamrooms (fetch-teamrooms token))
         (hours 0))
     (odesk:with-odesk (:format :json
                        :public-key *odesk-api-public-key*
