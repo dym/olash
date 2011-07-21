@@ -3,8 +3,7 @@
 (in-package :olash)
 
 (defun get-week-points (current-time)
-  (let* ((weekday (timestamp-day-of-week current-time))
-         (start-time (adjust-timestamp current-time (offset :day-of-week :monday)))
+  (let* ((start-time (adjust-timestamp current-time (offset :day-of-week :monday)))
          (end-time (adjust-timestamp start-time (offset :day 7))))
     (list (format-rfc3339-timestring nil start-time :omit-time-part t)
           (format-rfc3339-timestring nil end-time :omit-time-part t))))
@@ -30,3 +29,22 @@
       (hunchentoot:set-cookie *olash-web-session-key*
                               :path "/"
                               :value session))))
+
+(defun get-hours-from-report (session)
+  (odesk:with-odesk (:format :json
+                     :public-key *odesk-api-public-key*
+                     :secret-key *odesk-api-secret-key*
+                     :api-token (rbauth:get-token session))
+    (let* ((week-points (get-week-points (today)))
+           (json-text
+            (first
+             (odesk:timereports/get-provider :provider
+                                             (rbauth:get-username session)
+                                             :parameters
+                                             (list (cons "tq" (format nil "SELECT hours, team_id, worked_on WHERE (worked_on >= '~a') AND (worked_on < '~a')" (first week-points) (second week-points)))))))
+           (parsed-json (json:parse json-text))
+           (table (gethash "table" parsed-json))
+           (rows (gethash "rows" table))
+           (hours (iter (for htable in rows)
+                        (collect (read-from-string (gethash "v" (first (gethash "c" htable))))))))
+      (apply '+ hours))))
