@@ -2,6 +2,8 @@ var pct;
 var advice_number;
 google.load('visualization', '1', {packages: ['gauge']});
 google.setOnLoadCallback(drawChart);
+// Refresh every 10 minutes
+var holdInterval = window.setInterval(function(){drawChart();}, 600000);
 function drawChart() {
     levels = [40, 60, 80];
     advices = [
