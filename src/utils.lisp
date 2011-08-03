@@ -23,7 +23,6 @@
           (list (gethash "id" rooms))))))
 
 (defun fetch-hours-from-report (token &key username start-date end-date)
-  (format t "from report: ~a ~a~%" token username)
   (odesk:with-odesk (:format :json
                      :public-key *odesk-api-public-key*
                      :secret-key *odesk-api-secret-key*
