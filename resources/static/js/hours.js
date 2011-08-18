@@ -5,7 +5,7 @@ google.setOnLoadCallback(drawChart);
 // Refresh every 10 minutes
 var holdInterval = window.setInterval(function(){drawChart();}, 600000);
 function drawChart() {
-    levels = [40, 60, 80];
+    levels = [50, 75, 99.9, 110];
     advices = [
         ["Ways to go...", "Get working, now !", "You know, you are not on a vacation"],
         ["Lot done and a lot yet to do", "Work hard now to play hard later", "Please continue the good work"],
@@ -28,7 +28,7 @@ function drawChart() {
                            data.setValue(0, 1, pct);
                            var chart = new google.visualization.Gauge(document.getElementById('gauge'));
                            var options = {width: 300, height: 300, redFrom: 0, redTo: levels[0],
-                                          yellowFrom:levels[2], yellowTo: 100, greenFrom: levels[1], greenTo: levels[2],
+                                          yellowFrom:levels[2], yellowTo: levels[3], greenFrom: levels[1], greenTo: levels[2],
                                           redColor: '#D05922', yellowColor: '#F08800', greenColor: '#209020', minorTicks: 5};
                            chart.draw(data, options);
                            $('.advice .button').removeAttr('disabled');
