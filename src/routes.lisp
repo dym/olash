@@ -23,8 +23,10 @@
   (restas:redirect "/"))
 
 (restas:define-route util-get-hours ("/util/hours/"
-                                     :content-type "application/json")
+                                     :content-type "application/json"
+                                     :render-method #'encode-json)
   (let ((session (hunchentoot:cookie-in *olash-web-session-key*)))
+    (format t "hours: ~A~%" (get-hours session))
     (if (rbauth:authenticated-p session)
-        (tpl:utils-hours (list :content (format nil "{\"result\": \"~,2f\"}" (* (/ (get-hours session) 40) 100))))
-        (tpl:utils-hours (list :content "{\"result\": \"empty\"}")))))
+        (list :result (format nil "~,2f" (* (/ (get-hours session) 40) 100)))
+        '(:result "empty"))))

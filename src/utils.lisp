@@ -2,6 +2,48 @@
 
 (in-package :olash)
 
+(defmacro cdr-assoc (key array)
+  `(cdr (assoc ,key ,array)))
+
+(defun encode-json (obj)
+  (flet ((encode-json-list (list stream)
+           (if (keywordp (car list))
+               (json:encode-json-plist list stream)
+               (json::encode-json-list-guessing-encoder list stream))))
+    (let ((json::*json-list-encoder-fn* #'encode-json-list))
+      (json:encode-json-to-string obj))))
+
+(defmacro simple-json-bind ((&rest vars) stream &body body)
+  (let ((cur-dec (gensym))
+        (key-handler
+         `(lambda (json-string)
+            (let ((lisp-string
+                   (funcall json:*json-identifier-name-to-lisp*
+                            json-string)))
+              ;; On recognizing a variable name, the key handler sets
+              ;; the value handler to be a function which,
+              ;; in its turn, assigns the decoded value to the
+              ;; corresponding variable.  If no variable name matches
+              ;; the key, the value handler is set to skip the value.
+              (json:set-custom-vars
+                  :object-value
+                    (cond
+                      ,@(loop for var in vars
+                          collect
+                           `((string= lisp-string ,(symbol-name var))
+                             (lambda (value)
+                               (setq ,var value))))
+                      (t (constantly t))))))))
+    `(let ((,cur-dec (json:current-decoder))
+           ,@vars)
+       (json:bind-custom-vars
+           (:internal-decoder ,cur-dec
+            :beginning-of-object (constantly t)
+            :object-key ,key-handler
+            :end-of-object (constantly t))
+         (json:decode-json ,stream))
+       ,@body)))
+
 (defun get-week-points (current-time)
   (list (adjust-timestamp current-time (offset :day-of-week :monday))
         current-time))
@@ -9,18 +51,21 @@
 (defun test-token-callback (token)
   (format t "TOKEN: ~a~%" token))
 
-(defun fetch-teamrooms (token)
+(defun get-odesk-teams (token)
   (odesk:with-odesk (:format :json
                      :public-key *odesk-api-public-key*
                      :secret-key *odesk-api-secret-key*
                      :api-token token)
-    (let* ((json-text (first (odesk:team/get-teamrooms)))
-           (parsed-json (json:parse json-text))
-           (rooms (gethash "teamroom" (gethash "teamrooms" parsed-json))))
+    (let* ((json-text (first (odesk:hr/get-teams)))
+           (rooms (if json-text
+                      (json:with-decoder-simple-list-semantics
+                        (with-input-from-string (s json-text)
+                          (simple-json-bind (teams) s
+                            teams))))))
       (if (listp rooms)
-          (iter (for htable in rooms)
-                (collect (gethash "id" htable)))
-          (list (gethash "id" rooms))))))
+          (iter (for rooms-list in rooms)
+                (collect (cdr-assoc :id rooms-list)))
+          (cdr-assoc :id rooms)))))
 
 (defun fetch-hours-from-report (token &key username start-date end-date)
   (odesk:with-odesk (:format :json
@@ -33,15 +78,15 @@
                                              username
                                              :parameters
                                              (list (cons "tq" (format nil "SELECT hours, team_id, worked_on WHERE (worked_on >= '~a') AND (worked_on < '~a')" start-date end-date))))))
-           (parsed-json (json:parse json-text))
-           (table (gethash "table" parsed-json))
-           (rows (gethash "rows" table))
-           (hours (iter (for htable in rows)
-                        (collect (read-from-string (gethash "v" (first (gethash "c" htable))))))))
-      (apply '+ hours))))
+           (rows (json:with-decoder-simple-list-semantics
+                     (with-input-from-string (s json-text)
+                       (simple-json-bind (table) s
+                         (cdr-assoc :rows table))))))
+      (iter (for elem in rows)
+            (sum (read-from-string (cdr-assoc :v (first (cdr-assoc :c elem)))))))))
 
 (defun fetch-hours-from-workdiary (token &key username date)
-  (let ((teamrooms (fetch-teamrooms token))
+  (let ((teamrooms (get-odesk-teams token))
         (hours 0))
     (odesk:with-odesk (:format :json
                        :public-key *odesk-api-public-key*
@@ -53,15 +98,19 @@
                  (odesk:team/get-workdiary :company teamroom
                                            :username username
                                            :date date)))
-               (parsed-json (json:parse json-text))
-               (snap-list (gethash "snapshot" (gethash "snapshots" parsed-json)))
-               (snapshots (iter (for htable in snap-list)
-                                (if (not (cl-ppcre:scan "non-billed" (gethash "billing_status" htable)))
-                                    (collect htable)))))
-          (incf hours
-                (/ (length snapshots) 6.0)))))
+               (snap-list (if json-text
+                              (json:with-decoder-simple-list-semantics
+                                (with-input-from-string (s json-text)
+                                  (simple-json-bind (snapshots) s
+                                    (cdr-assoc :snapshot snapshots)))))))
+          (incf hours (/
+                       (iter (for elem in snap-list)
+                             (if (not (cl-ppcre:scan
+                                       "non-billed"
+                                       (cdr-assoc :billing--status elem)))
+                                 (count elem)))
+                       6.0)))))
     hours))
-
 
 (defun rbauth-token-callback (token)
   (odesk:with-odesk (:format :json
@@ -69,15 +118,15 @@
                      :secret-key *odesk-api-secret-key*
                      :api-token token)
     (let* ((json-text (first (odesk:hr/get-myself)))
-           (parsed-json (json:parse json-text))
-           (user-info (gethash "user" parsed-json))
-           (username (gethash "id" user-info))
-           (first-name (gethash "first_name" user-info))
-           (last-name (gethash "last_name" user-info))
+           (user-info (json:with-decoder-simple-list-semantics
+                        (with-input-from-string (s json-text)
+                          (simple-json-bind (user) s
+                            user))))
+           (username (cdr (assoc :id user-info)))
            (session (rbauth:generate-session username)))
       (rbauth:login username token session
-                    :first-name first-name
-                    :last-name last-name)
+                    :first-name (cdr (assoc :first--name user-info))
+                    :last-name (cdr (assoc :last--name user-info)))
       (hunchentoot:set-cookie *olash-web-session-key*
                               :path "/"
                               :value session))))
