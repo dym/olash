@@ -2,7 +2,8 @@
 
 (setf sb-impl::*default-external-format* :utf-8)
 
-(defparameter *list-of-libraries* '(:iterate
+(defparameter *list-of-libraries* '(:closer-mop
+                                    :iterate
                                     :split-sequence
                                     :local-time
                                     :cl-ppcre
