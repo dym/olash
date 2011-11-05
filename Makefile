@@ -1,12 +1,11 @@
 export BUILD_DIR=${PWD}/build/
-export REGISTRY_DIR=~/.config/common-lisp/source-registry.conf.d/
 
 get_hunchentoot:
 	@echo "Downloading Hunchentoot"
 	if [ -d "${BUILD_DIR}/hunchentoot" ] ; then \
 	    cd ${BUILD_DIR}/hunchentoot && git pull; \
 	else \
-	    cd ${BUILD_DIR} && git clone https://github.com/archimag/hunchentoot.git; \
+	    cd ${BUILD_DIR} && git clone https://github.com/edicl/hunchentoot.git;\
 	fi
 
 get_hunchentoot_cgi:
@@ -38,7 +37,7 @@ get_restas_odesk:
 	if [ -d "${BUILD_DIR}/restas-odesk" ] ; then \
 	    cd ${BUILD_DIR}/restas-odesk && git pull; \
 	else \
-	    cd ${BUILD_DIR} && git clone https://github.com/dym/restas-odesk.git; \
+	    cd ${BUILD_DIR} && git clone https://github.com/dym/restas-odesk.git --branch cl-json; \
 	fi
 
 get_restas_dirpub:
@@ -59,7 +58,6 @@ get_cl_rbauth:
 
 bootstrap:
 	mkdir -p ${BUILD_DIR}
-	mkdir -p ${REGISTRY_DIR}
 	$(MAKE) get_hunchentoot
 	$(MAKE) get_hunchentoot_cgi
 	$(MAKE) get_restas
@@ -67,13 +65,6 @@ bootstrap:
 	$(MAKE) get_restas_odesk
 	$(MAKE) get_restas_dirpub
 	$(MAKE) get_cl_rbauth
-	echo "(:directory \"${BUILD_DIR}/hunchentoot/\")" > ${REGISTRY_DIR}/hunchentoot.conf
-	echo "(:directory \"${BUILD_DIR}/hunchentoot-cgi/\")" > ${REGISTRY_DIR}/hunchentoot-cgi.conf
-	echo "(:directory \"${BUILD_DIR}/restas/\")" > ${REGISTRY_DIR}/restas.conf
-	echo "(:directory \"${BUILD_DIR}/cl-odesk/\")" > ${REGISTRY_DIR}/cl-odesk.conf
-	echo "(:directory \"${BUILD_DIR}/restas-odesk/\")" > ${REGISTRY_DIR}/restas-odesk.conf
-	echo "(:directory \"${BUILD_DIR}/restas-directory-publisher/\")" > ${REGISTRY_DIR}/restas-dirpub.conf
-	echo "(:directory \"${BUILD_DIR}/cl-rbauth/\")" > ${REGISTRY_DIR}/cl-rbauth.conf
 
 quickload:
 	sbcl --noinform --script requirements.lisp

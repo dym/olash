@@ -1,3 +1,23 @@
+; -*- coding: utf-8; mode: common-lisp; -*-
+
+(setf sb-impl::*default-external-format* :utf-8)
+
+(defparameter *list-of-libraries* '(:iterate
+                                    :split-sequence
+                                    :local-time
+                                    :cl-ppcre
+                                    :cl-json
+                                    :drakma
+                                    :closure-template
+                                    :md5
+                                    :trivial-backtrace
+                                    :rfc2388
+                                    :cl-fad
+                                    :iolib.syscalls
+                                    :cl-redis
+                                    :swank
+                                    :routes))
+
 #-quicklisp
 (let ((quicklisp-init (merge-pathnames "quicklisp/setup.lisp"
                                        (user-homedir-pathname))))
@@ -15,19 +35,5 @@
       (asdf:perform (make-instance 'asdf:compile-op) c)
       (call-next-method))))
 
-(ql:quickload 'closure-template)
-(ql:quickload 'md5)
-(ql:quickload 'iterate)
-(ql:quickload 'drakma)
-(ql:quickload 'split-sequence)
-(ql:quickload 'cl-ppcre)
-(ql:quickload 'yason)
-(ql:quickload 'routes)
-(ql:quickload 'trivial-backtrace)
-(ql:quickload 'rfc2388)
-(ql:quickload 'cl-fad)
-(ql:quickload 'iolib.syscalls)
-(ql:quickload 'local-time)
-(ql:quickload 'cl-redis)
-(ql:quickload 'swank)
-(ql:quickload 'cl-ppcre)
+(dolist (library *list-of-libraries*)
+  (ql:quickload library))
