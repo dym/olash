@@ -26,7 +26,6 @@
                                      :content-type "application/json"
                                      :render-method #'encode-json)
   (let ((session (hunchentoot:cookie-in *olash-web-session-key*)))
-    (format t "hours: ~A~%" (get-hours session))
     (if (rbauth:authenticated-p session)
         (list :result (format nil "~,2f" (* (/ (get-hours session) 40) 100)))
         '(:result "empty"))))

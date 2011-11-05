@@ -102,14 +102,14 @@
                               (json:with-decoder-simple-list-semantics
                                 (with-input-from-string (s json-text)
                                   (simple-json-bind (snapshots) s
-                                    (cdr-assoc :snapshot snapshots)))))))
-          (incf hours (/
-                       (iter (for elem in snap-list)
-                             (if (not (cl-ppcre:scan
-                                       "non-billed"
-                                       (cdr-assoc :billing--status elem)))
-                                 (count elem)))
-                       6.0)))))
+                                    (cdr-assoc :snapshot snapshots))))))
+               (team-periods (iter (for elem in snap-list)
+                                   (if (not (cl-ppcre:scan
+                                             "non-billed"
+                                             (cdr-assoc :billing--status elem)))
+                                       (count elem)))))
+          (format t "[workdiary] Teamroom: ~A = ~A~%" teamroom (/ team-periods 6.0))
+          (incf hours (/ team-periods 6.0)))))
     hours))
 
 (defun rbauth-token-callback (token)
