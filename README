@@ -1,3 +1,5 @@
+Be sure that your system timezone is UTC.
+
 First copy file src/parameters.lisp.draft to src/parameters.lisp and add real oDesk API keys there.
 
 # apt-get install sbcl make curl redis-server git

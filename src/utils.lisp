@@ -108,7 +108,7 @@
                                              "non-billed"
                                              (cdr-assoc :billing--status elem)))
                                        (count elem)))))
-          (format t "[workdiary] Teamroom: ~A = ~A~%" teamroom (/ team-periods 6.0))
+          (format t "[workdiary] Teamroom: ~A (~A)= ~A~%" teamroom date (/ team-periods 6.0))
           (incf hours (/ team-periods 6.0)))))
     hours))
 
@@ -167,6 +167,7 @@
                                        :username username
                                        :start-date start-date
                                        :end-date end-date)))
+    (format t "[report] ~A .. ~A = ~A~%" start-date end-date hours)
     (+ hours
        (fetch-hours-from-workdiary token
                                    :username username
