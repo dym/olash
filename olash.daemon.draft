@@ -2,14 +2,26 @@
 
 (defparameter *name* "olash")
 
-(defparameter *user* "dym")
+(defparameter *user* "dbudashny")
 
-(defparameter *group* "dym")
+(defparameter *group* "dbudashny")
 
-(defparameter *swankport* 30010)
+(defparameter *swankport* 30020)
 
 (defparameter *default-host-redirect* nil)
 
+(defparameter *asdf-central-registry*
+  '(#p"/home/dbudashny/tmp/olash/"
+    #p"/home/dbudashny/tmp/olash/build/hunchentoot/"
+    #p"/home/dbudashny/tmp/olash/build/hunchentoot-cgi/"
+    #p"/home/dbudashny/tmp/olash/build/data-sift/"
+    #p"/home/dbudashny/tmp/olash/build/restas/"
+    #p"/home/dbudashny/tmp/olash/build/cl-odesk/"
+    #p"/home/dbudashny/tmp/olash/build/restas-odesk/"
+    #p"/home/dbudashny/tmp/olash/build/restas-directory-publisher/"
+    #p"/home/dbudashny/tmp/olash/build/mongo-cl-driver/"
+    #p"/home/dbudashny/tmp/olash/build/cl-rbauth/"))
+
 (defparameter *asdf-load-systems* '(#:olash))
 
-(defparameter *sites* '((#:olash nil 8000)))
+(defparameter *sites* '((#:olash "olash.odeskps.com" 8001)))
